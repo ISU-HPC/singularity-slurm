@@ -1,0 +1,32 @@
+BootStrap: shub
+From: ISU-HPC/centos7-base
+
+%label
+
+MAINTAINER Yasasvy Nanyam ynanyam@iastate.edu
+
+%environment
+    export TMPDIR=/local/scratch/$USER
+
+%post
+    echo "Hello from inside the container"
+    yum repolist
+    yum -y install vim-minimal
+
+
+    yum -y install shadow-utils
+    groupadd -g 1000 slurm
+    useradd  -m -c "Slurm workload manager" -d /var/lib/slurm -u 401 -g slurm  -s /bin/bash slurm
+    groupadd -g 398 munge
+    useradd  -m -c "MUNGE Uid 'N' Gid Emporium" -d /var/lib/munge -u 398 -g munge  -s /sbin/nologin munge
+
+    yum -y install epel-release
+    yum -y install wget tar gcc bzip2
+
+    wget https://repo.continuum.io/miniconda/Miniconda3-3.7.0-Linux-x86_64.sh -O /opt/miniconda.sh
+    sh /opt/miniconda.sh -b -p /opt/miniconda
+
+    echo 'export PATH=/opt/miniconda/bin:$PATH' >>$SINGULARITY_ENVIRONMENT
+
+    yum clean all
+    rm -rf /var/cache/yum
