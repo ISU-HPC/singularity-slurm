@@ -1,5 +1,7 @@
-BootStrap: shub
-From: ISU-HPC/centos7-base
+Bootstrap: yum
+OSVersion: 7
+MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
+Include: yum
 
 %label
 
